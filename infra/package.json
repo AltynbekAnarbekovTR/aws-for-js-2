@@ -8,7 +8,12 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "cdk-synth": "cdk synth",
+    "build:shop": "cd ../react-shop && npm run build:external",
+    "cdk-deploy": "cdk deploy",
+    "deploy:shop": "npm run build:shop && npm run cdk-synth && npm run cdk-deploy --stacks DeployWebAppStack",
+    "destroy": "cdk destroy"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
