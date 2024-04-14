@@ -14,8 +14,8 @@
     "build:shop": "cd ../react-shop && npm run build:external",
     "deploy:shop": "npm run build:shop && cdk deploy DeployWebAppStack/deployment",
     "deploy:web-app-stack": "cdk deploy DeployWebAppStack/deployment",
-    "deploy:product-stack": "npm run build && cdk deploy ProductServiceStack",
-    "deploy:all": "npm run build:shop && npm run build && cdk deploy --all",
+    "deploy:product-stack": "npm run build:webpack && cdk deploy ProductServiceStack",
+    "deploy:all": "npm run build:shop && npm run build:webpack && cdk deploy --all",
     "build:webpack": "webpack",
     "test:clear": "jest --clearCache",
     "destroy": "cdk destroy"
