@@ -20,7 +20,7 @@ export class ProductServiceStack extends cdk.Stack {
     const getProductsList = new lambda.Function(this, 'GetProductsList', {
       runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'handlers/getProductsList.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, './')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../../../dist')),
       environment: {
         PRODUCTS: mockProducts,
       },
@@ -30,7 +30,7 @@ export class ProductServiceStack extends cdk.Stack {
     const getProductsById = new lambda.Function(this, 'GetProductsById', {
       runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'handlers/getProductsById.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, './')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../../../dist')),
       environment: {
         PRODUCTS: mockProducts,
       },

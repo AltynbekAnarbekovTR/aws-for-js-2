@@ -8,7 +8,6 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "test:clear": "jest --clearCache",
     "cdk": "cdk",
     "cdk-synth": "cdk synth",
     "cdk-deploy": "cdk deploy",
@@ -17,17 +16,23 @@
     "deploy:web-app-stack": "cdk deploy DeployWebAppStack/deployment",
     "deploy:product-stack": "npm run build && cdk deploy ProductServiceStack",
     "deploy:all": "npm run build:shop && npm run build && cdk deploy --all",
+    "build:webpack": "webpack",
+    "test:clear": "jest --clearCache",
     "destroy": "cdk destroy"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.137",
     "@types/jest": "^29.5.12",
-    "@types/node": "20.11.30",
+    "@types/node": "^20.11.30",
+    "aws-cdk": "2.134.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.2",
-    "aws-cdk": "2.134.0",
+    "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
-    "typescript": "~5.4.3"
+    "typescript": "~5.4.3",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
     "aws-cdk-lib": "2.134.0",
