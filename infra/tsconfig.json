@@ -3,7 +3,7 @@
     "target": "ES2020",
     "module": "commonjs",
     "lib": ["es2020", "dom"],
-    // "declaration": true,
+    "declaration": true,
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -17,7 +17,13 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"],
+    "baseUrl": "./", // Set the base directory for relative paths
+    "paths": {
+      "@lib/*": ["lib/*"], // Maps imports from "@models" to "src/models"
+      "@components/*": ["src/components/*"], // Maps imports from "@components" to "src/components"
+      "@utils/*": ["src/utils/*"] // Maps imports from "@utils" to "src/utils"
+    }
   },
   "include": ["lib/project/lambda/**/*"],
   "exclude": ["node_modules", "cdk.out", "**/*.test.ts"]

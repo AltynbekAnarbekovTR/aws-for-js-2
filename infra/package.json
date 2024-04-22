@@ -13,9 +13,10 @@
     "cdk-deploy": "cdk deploy",
     "build:shop": "cd ../react-shop && npm run build:external",
     "deploy:shop": "npm run build:shop && cdk deploy DeployWebAppStack/deployment",
-    "deploy:web-app-stack": "cdk deploy DeployWebAppStack/deployment",
-    "deploy:product-stack": "npm run build:webpack && cdk deploy ProductServiceStack",
-    "deploy:all": "npm run build:shop && npm run build:webpack && cdk deploy --all",
+    "deploy:web-app": "cdk deploy DeployWebAppStack/deployment",
+    "deploy:product": "npm run build && cdk deploy ProductServiceStack",
+    "deploy:dynamo": "npm run build && cdk deploy TodoStack",
+    "deploy:all": "npm run build:shop && npm run build && cdk deploy --all",
     "build:webpack": "webpack",
     "test:clear": "jest --clearCache",
     "destroy": "cdk destroy"
@@ -35,8 +36,14 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.556.0",
+    "@types/uuid": "^9.0.8",
     "aws-cdk-lib": "2.134.0",
+    "aws-lambda": "^1.0.7",
     "constructs": "^10.0.0",
-    "source-map-support": "^0.5.21"
+    "glob": "^10.3.12",
+    "mysql2": "^3.9.6",
+    "source-map-support": "^0.5.21",
+    "uuid": "^9.0.1"
   }
 }
