@@ -5,6 +5,7 @@ import { DeployWebAppStack } from '../lib/project/stacks/web-app/deploy-web-app-
 import { ProductServiceStack } from '../lib/project/stacks/products/product-service-stack';
 import { DynamoStack } from '../lib/project/stacks/dynamo/dynamo-stack';
 import { RdsLambdaStack } from '../lib/project/stacks/rds/rds-stack';
+import { ImportServiceStack } from '../lib/project/stacks/importCSV/import-service-stack';
 
 const app = new cdk.App();
 new DeployWebAppStack(app, 'DeployWebAppStack', {
@@ -27,3 +28,4 @@ new RdsLambdaStack(app, 'RdsLambdaStack', {
     region: process.env.CDK_DEFAULT_REGION,
   },
 });
+new ImportServiceStack(app, 'ImportServiceStack');
