@@ -28,6 +28,7 @@ export class ImportServiceStack extends Stack {
             s3.HttpMethods.GET,
             s3.HttpMethods.PUT,
             s3.HttpMethods.POST,
+            s3.HttpMethods.DELETE,
           ],
           allowedHeaders: ['*'],
         },
@@ -70,7 +71,8 @@ export class ImportServiceStack extends Stack {
     });
 
     // Grant the Lambda function read permissions to the S3 bucket
-    bucket.grantRead(parserLambda);
+    bucket.grantReadWrite(parserLambda);
+    bucket.grantDelete(parserLambda);
 
     // Set up the S3 event notification
     bucket.addObjectCreatedNotification(
