@@ -75,6 +75,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /import:
+    get:
+      summary: Get a pre-signed URL to upload a file
+      operationId: getPresignedUrl
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+            description: The file name for which the pre-signed URL will be generated
+      responses:
+        '200':
+          description: Successfully retrieved pre-signed URL
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: The pre-signed URL for file upload
+        '400':
+          description: Missing file name parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   schemas:
     Product:
