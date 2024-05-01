@@ -11,7 +11,7 @@ const csvParser = require('csv-parser');
 const s3 = new S3Client();
 const PARSED_FOLDER = 'parsed/';
 const uploadPath = process.env.UPLOAD_PATH as string;
-const bucketName = process.env.UPLOAD_BUCKET;
+const bucketName = process.env.BUCKET_NAME;
 
 interface Row {
   data: string;
