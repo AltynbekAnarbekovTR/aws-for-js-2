@@ -52,14 +52,16 @@ export const handler: Handler = async (event) => {
         Key: key,
       };
       const data = await s3.send(new GetObjectCommand(getObjectParams));
-
-      const stream = data.Body.pipe(csvParser());
-      stream.on('data', (row: Row) => {
-        console.log('Parsed row:', row);
-      });
-      stream.on('end', async () => {
-        console.log('CSV file successfully processed');
-        await moveFile(bucketName, key);
+      await new Promise((resolve, reject) => {
+        const stream = data.Body.pipe(csvParser());
+        stream.on('data', (row: Row) => {
+          console.log('Parsed row:', row);
+        });
+        stream.on('end', async () => {
+          console.log('CSV file successfully processed');
+          await moveFile(bucketName, key);
+          resolve('Parsed');
+        });
       });
     } catch (err) {
       console.error('Error processing S3 event:', err);
