@@ -5,9 +5,9 @@ import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import { Construct } from 'constructs';
 import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 
-const lambdaPath = 'lib/project/lambda';
-// const lambdaPath = '../../../../lib/project/lambda';
-const handlersPath = 'import/handlers';
+const LAMBDA_PATH = 'lib/project/lambda';
+const HANDLERS_PATH = 'import/handlers';
+const UPLOAD_PATH = 'uploaded/';
 
 export class ImportServiceStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -38,8 +38,8 @@ export class ImportServiceStack extends Stack {
     // Define the Lambda function
     const lambdaFunction = new lambda.Function(this, 'ImportProductsFile', {
       runtime: lambda.Runtime.NODEJS_20_X,
-      handler: `${handlersPath}/importProductsFile.handler`,
-      code: lambda.Code.fromAsset(lambdaPath),
+      handler: `${HANDLERS_PATH}/importProductsFile.handler`,
+      code: lambda.Code.fromAsset(LAMBDA_PATH),
       environment: {
         BUCKET_NAME: bucket.bucketName,
       },
@@ -63,16 +63,16 @@ export class ImportServiceStack extends Stack {
     // Define the Lambda function for parsing
     const parserLambda = new lambda.Function(this, 'ImportFileParser', {
       runtime: lambda.Runtime.NODEJS_20_X,
-      handler: `${handlersPath}/parser.handler`,
-      code: lambda.Code.fromAsset(lambdaPath),
+      handler: `${HANDLERS_PATH}/parser.handler`,
+      code: lambda.Code.fromAsset(LAMBDA_PATH),
       environment: {
         BUCKET_NAME: bucket.bucketName,
+        UPLOAD_PATH: UPLOAD_PATH,
       },
     });
 
     // Grant the Lambda function read permissions to the S3 bucket
     bucket.grantReadWrite(parserLambda);
-    bucket.grantDelete(parserLambda);
 
     // Set up the S3 event notification
     bucket.addObjectCreatedNotification(

@@ -7,14 +7,18 @@ const {
   DeleteObjectCommand,
 } = require('@aws-sdk/client-s3');
 const csvParser = require('csv-parser');
+
 const s3 = new S3Client();
+const PARSED_FOLDER = 'parsed/';
+const uploadPath = process.env.UPLOAD_PATH as string;
+const bucketName = process.env.UPLOAD_BUCKET;
 
 interface Row {
   data: string;
 }
 
 const moveFile = async (bucketName: string, key: string) => {
-  const newKey = key.replace('uploaded/', 'parsed/');
+  const newKey = key.replace(uploadPath, PARSED_FOLDER);
   // Copy the file to the new location
   try {
     await s3.send(
@@ -43,7 +47,7 @@ const moveFile = async (bucketName: string, key: string) => {
 export const handler: Handler = async (event) => {
   console.log('Parser handler event:', event);
   for (const record of event.Records) {
-    const bucketName = record.s3.bucket.name;
+    // const bucketName = record.s3.bucket.name;
     const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, ' '));
 
     try {
@@ -59,7 +63,9 @@ export const handler: Handler = async (event) => {
         });
         stream.on('end', async () => {
           console.log('CSV file successfully processed');
-          await moveFile(bucketName, key);
+          if (bucketName) {
+            await moveFile(bucketName, key);
+          } else reject('Bucket name not provided');
           resolve('Parsed');
         });
       });
