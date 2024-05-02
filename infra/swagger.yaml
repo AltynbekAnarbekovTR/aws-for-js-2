@@ -1,0 +1,147 @@
+openapi: 3.0.0
+info:
+  title: Product Service API
+  description: This service serves product details.
+  version: 1.0.0
+
+servers:
+  - url: https://ohn00xun9e.execute-api.us-east-1.amazonaws.com/prod
+    description: Production server (uses live data)
+
+paths:
+  /products:
+    get:
+      summary: List all products
+      operationId: getProducts
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '404':
+          description: Products not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a new product
+      operationId: createProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProduct'
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /products/{productId}:
+    get:
+      summary: Find product by ID
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detailed information about a product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /import:
+    get:
+      summary: Get a pre-signed URL to upload a file
+      operationId: getPresignedUrl
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+            description: The file name for which the pre-signed URL will be generated
+      responses:
+        '200':
+          description: Successfully retrieved pre-signed URL
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: The pre-signed URL for file upload
+        '400':
+          description: Missing file name parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: float
+        count:
+          type: integer
+
+    NewProduct:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: float
+        count:
+          type: integer
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
