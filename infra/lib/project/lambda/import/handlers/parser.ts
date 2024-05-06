@@ -27,10 +27,6 @@ const PARSED_FOLDER = 'parsed/';
 const uploadPath = process.env.UPLOAD_PATH as string;
 const bucketName = process.env.BUCKET_NAME;
 
-interface Row {
-  data: string;
-}
-
 const moveFile = async (bucketName: string, key: string) => {
   const newKey = key.replace(uploadPath, PARSED_FOLDER);
   // Copy the file to the new location
@@ -61,7 +57,6 @@ const moveFile = async (bucketName: string, key: string) => {
 export const handler: Handler = async (event) => {
   console.log('Parser handler event:', event);
   for (const record of event.Records) {
-    // const bucketName = record.s3.bucket.name;
     const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, ' '));
 
     try {

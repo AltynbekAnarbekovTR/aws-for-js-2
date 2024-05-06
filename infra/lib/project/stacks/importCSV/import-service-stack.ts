@@ -86,7 +86,7 @@ export class ImportServiceStack extends Stack {
       'CatalogBatchProcess',
       {
         runtime: lambda.Runtime.NODEJS_20_X,
-        handler: 'handlers/csv-sqs-handler.handler',
+        handler: 'handlers/create-from-csv.handler',
         code: lambda.Code.fromAsset(LAMBDA_PATH),
         memorySize: 1024,
         environment: {
