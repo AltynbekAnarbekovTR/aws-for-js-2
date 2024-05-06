@@ -1,3 +1,4 @@
+// infra\lib\project\lambda\import\handlers\parser.ts:
 import { Handler } from 'aws-lambda';
 
 const {
@@ -7,6 +8,19 @@ const {
   DeleteObjectCommand,
 } = require('@aws-sdk/client-s3');
 const csvParser = require('csv-parser');
+const { SQSClient, SendMessageCommand } = require('@aws-sdk/client-sqs');
+
+const sqs = new SQSClient({ region: process.env.AWS_REGION });
+const queueUrl = process.env.SQS_QUEUE_URL;
+console.log('queueUrl: ', queueUrl);
+
+const processRecord = async (record: any) => {
+  const sqsParams = {
+    QueueUrl: queueUrl,
+    MessageBody: JSON.stringify(record),
+  };
+  await sqs.send(new SendMessageCommand(sqsParams));
+};
 
 const s3 = new S3Client();
 const PARSED_FOLDER = 'parsed/';
@@ -58,9 +72,7 @@ export const handler: Handler = async (event) => {
       const data = await s3.send(new GetObjectCommand(getObjectParams));
       await new Promise((resolve, reject) => {
         const stream = data.Body.pipe(csvParser());
-        stream.on('data', (row: Row) => {
-          console.log('Parsed row:', row);
-        });
+        stream.on('data', processRecord);
         stream.on('end', async () => {
           console.log('CSV file successfully processed');
           if (bucketName) {
