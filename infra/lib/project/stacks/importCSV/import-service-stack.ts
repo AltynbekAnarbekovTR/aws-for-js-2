@@ -80,6 +80,40 @@ export class ImportServiceStack extends Stack {
       displayName: 'Product Creation Topic',
     });
 
+    // Add an object to keep track of created subscriptions
+    const createdSubscriptions: { [key: string]: sns.ITopicSubscription } = {};
+
+    // Define filter policies
+    const filterPolicy = {
+      color: sns.SubscriptionFilter.stringFilter({
+        allowlist: ['red', 'blue', 'green'],
+      }),
+      size: sns.SubscriptionFilter.stringFilter({
+        allowlist: ['small', 'medium', 'large'],
+      }),
+    };
+
+    // Define email subscriptions based on filter
+    const emailSubscriptions: { [brbr: string]: string } = {
+      redProductsSubscription: 'altynbek_anarbekov@epam.com',
+      blueProductsSubscription: 'altynbek290697@gmail.com',
+    };
+
+    // Add email subscriptions with filter policies
+    for (const filter in emailSubscriptions) {
+      const email = emailSubscriptions[filter];
+
+      if (!createdSubscriptions[filter]) {
+        const subscription = new subs.EmailSubscription(email, {
+          filterPolicy: filterPolicy,
+        });
+        createProductTopic.addSubscription(subscription);
+      } else {
+        console.log(`Subscription for filter ${filter} already exists.`);
+      }
+    }
+    // Finish SNS
+
     // Later in your lambda definition
     const catalogBatchProcessLamda = new lambda.Function(
       this,
@@ -106,9 +140,9 @@ export class ImportServiceStack extends Stack {
     // Grant necessary permissions for the lambda function
     createProductTopic.grantPublish(catalogBatchProcessLamda);
     // Add email subscription
-    createProductTopic.addSubscription(
-      new subs.EmailSubscription('altynbek290697@example.com')
-    );
+    // createProductTopic.addSubscription(
+    //   new subs.EmailSubscription('altynbek290697@example.com')
+    // );
 
     // Define the Lambda function for parsing
     const parserLambda = new lambda.Function(this, 'ImportFileParser', {
