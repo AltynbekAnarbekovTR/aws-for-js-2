@@ -6,6 +6,7 @@ import { ProductServiceStack } from '../lib/project/stacks/products/product-serv
 import { DynamoStack } from '../lib/project/stacks/dynamo/dynamo-stack';
 import { RdsLambdaStack } from '../lib/project/stacks/rds/rds-stack';
 import { ImportServiceStack } from '../lib/project/stacks/importCSV/import-service-stack';
+import { AuthorizerStack } from '../lib/project/stacks/authorization/authorization-stack';
 
 const app = new cdk.App();
 new DeployWebAppStack(app, 'DeployWebAppStack', {
@@ -29,3 +30,5 @@ new RdsLambdaStack(app, 'RdsLambdaStack', {
   },
 });
 new ImportServiceStack(app, 'ImportServiceStack');
+
+new AuthorizerStack(app, 'AuthorizerStack');
