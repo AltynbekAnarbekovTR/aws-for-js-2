@@ -1,3 +1,4 @@
+// infra\lib\project\lambda\products\handlers\createProduct.ts:
 import { Handler } from 'aws-lambda';
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { v4 as uuidv4 } from 'uuid';

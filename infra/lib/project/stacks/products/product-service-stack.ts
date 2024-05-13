@@ -1,4 +1,4 @@
-// Filename: product-service-stack.ts
+// infra\lib\project\stacks\products\product-service-stack.ts:
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as cdk from 'aws-cdk-lib';

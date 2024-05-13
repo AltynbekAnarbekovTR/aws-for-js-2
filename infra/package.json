@@ -18,6 +18,8 @@
     "deploy:dynamo": "npm run build && cdk deploy TodoStack",
     "deploy:rds": "npm run build && cdk deploy RdsLambdaStack",
     "deploy:import-csv": "npm run build && cdk deploy ImportServiceStack",
+    "deploy:sqs": "npm run build && cdk deploy ProductSqsStack",
+    "deploy:sns": "npm run build && cdk deploy ProductSnsStack",
     "deploy:all": "npm run build:shop && npm run build && cdk deploy --all",
     "build:webpack": "webpack",
     "test:clear": "jest --clearCache",
@@ -40,6 +42,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.556.0",
     "@aws-sdk/client-s3": "^3.564.0",
+    "@aws-sdk/client-sns": "^3.569.0",
     "@aws-sdk/s3-request-presigner": "^3.564.0",
     "@types/uuid": "^9.0.8",
     "aws-cdk-lib": "2.134.0",
