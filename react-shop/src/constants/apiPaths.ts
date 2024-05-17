@@ -8,8 +8,13 @@
 
 const productsBaseUrl =
   "https://ohn00xun9e.execute-api.us-east-1.amazonaws.com/prod";
+// const importCSVBaseUrl =
+//   "https://hhsb0bt0k4.execute-api.us-east-1.amazonaws.com/prod";
+
+// const importCSVBaseUrl =
+//   "https://4b260ranz8.execute-api.us-east-1.amazonaws.com/prod";
 const importCSVBaseUrl =
-  "https://hhsb0bt0k4.execute-api.us-east-1.amazonaws.com/prod";
+  "https://4a7s2rf243.execute-api.us-east-1.amazonaws.com/prod";
 
 const API_PATHS = {
   products: `${productsBaseUrl}/product`,
