@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { theme } from "~/theme";
+import { ErrorProvider } from "./store/errors/errors";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,14 +25,16 @@ const container = document.getElementById("app");
 const root = createRoot(container!);
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </BrowserRouter>
+    <ErrorProvider>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </BrowserRouter>
+    </ErrorProvider>
   </React.StrictMode>
 );
