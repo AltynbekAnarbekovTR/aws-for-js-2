@@ -5,7 +5,7 @@ import { DeployWebAppStack } from '../lib/project/stacks/web-app/deploy-web-app-
 import { ProductServiceStack } from '../lib/project/stacks/products/product-service-stack';
 import { DynamoStack } from '../lib/project/stacks/dynamo/dynamo-stack';
 import { RdsLambdaStack } from '../lib/project/stacks/rds/rds-stack';
-import { BackendStack } from '../lib/project/stacks/backend-stack/backend-stack';
+import { ImportStack } from '../lib/project/stacks/import-stack/import-stack';
 
 const app = new cdk.App();
 new DeployWebAppStack(app, 'DeployWebAppStack', {
@@ -29,4 +29,4 @@ new RdsLambdaStack(app, 'RdsLambdaStack', {
   },
 });
 
-new BackendStack(app, 'BackendStack');
+new ImportStack(app, 'ImportStack');

@@ -3,41 +3,41 @@ import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as dotenv from 'dotenv';
-const LAMBDA_PATH = 'lib/project/lambda/authorization';
 dotenv.config();
 
-const GITHUB_NAME = 'AltynbekAnarbekovTR';
+const PATH_TO_LAMBDA = 'lib/project/lambda/authorization';
+const ENV_KEY_GITHUB_USER = 'AltynbekAnarbekovTR';
 
-export class AuthService extends Construct {
-  lambdaTokenAuthorizer: apigateway.TokenAuthorizer;
+export class AuthorizationService extends Construct {
+  tokenAuthorizer: apigateway.TokenAuthorizer;
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    // Lambda, which takes incoming request and checks the auth
-    const authorizerLambda = new lambda.Function(
-      this,
-      'authentication-lambda',
-      {
-        runtime: lambda.Runtime.NODEJS_20_X,
-        memorySize: 512,
-        timeout: cdk.Duration.seconds(10),
-        handler: 'handlers/authorization.handler',
-        code: lambda.Code.fromAsset(LAMBDA_PATH),
-        environment: {
-          USER_PASSWORD: process.env[GITHUB_NAME] as string,
-        },
-      }
-    );
+    // Lambda function for authenticating incoming requests
+    const authLambda = new lambda.Function(this, 'AuthLambda', {
+      runtime: lambda.Runtime.NODEJS_20_X,
+      memorySize: 512,
+      timeout: cdk.Duration.seconds(10),
+      handler: 'handlers/authorization.handler',
+      code: lambda.Code.fromAsset(PATH_TO_LAMBDA),
+      environment: {
+        USER_PASSWORD: process.env[ENV_KEY_GITHUB_USER] as string,
+      },
+    });
 
-    // Token Authorization, which will be injected to API Gateway
-    this.lambdaTokenAuthorizer = new apigateway.TokenAuthorizer(
+    // API Gateway Token Authorizer using the Lambda function
+    this.tokenAuthorizer = new apigateway.TokenAuthorizer(
       this,
-      'operationalAuthorizer',
+      'APIGatewayTokenAuthorizer',
       {
-        handler: authorizerLambda,
+        handler: authLambda,
         identitySource: apigateway.IdentitySource.header('Authorization'),
       }
     );
+  }
+
+  public getTokenAuthorizer(): apigateway.TokenAuthorizer {
+    return this.tokenAuthorizer;
   }
 }

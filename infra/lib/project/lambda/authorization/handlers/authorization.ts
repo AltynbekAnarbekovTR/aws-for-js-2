@@ -1,38 +1,32 @@
 import { APIGatewayTokenAuthorizerEvent } from 'aws-lambda';
 
-export const handler = async (event: APIGatewayTokenAuthorizerEvent) => {
+export async function authorizationHandler(
+  event: APIGatewayTokenAuthorizerEvent
+) {
+  console.log('Received event:', event);
+
   try {
-    console.log('authorization handler event', event);
+    const credentials = extractCredentials(event.authorizationToken);
+    const authorizationResult = authorizeUser(credentials);
 
-    const creds = decodeAuthHeader(event.authorizationToken);
-    const passFromEnv = await getUserPass(creds.login);
-
-    const isUserAllowed =
-      creds.login && creds.login === process.env.USER_PASSWORD
-        ? 'Allow'
-        : 'Deny';
-
-    const iamPolicy = generatePolicy(
-      creds.login,
-      isUserAllowed,
+    const policy = createPolicy(
+      credentials.username,
+      authorizationResult,
       event.methodArn
     );
 
-    return iamPolicy;
+    return policy;
   } catch (error) {
-    console.error('Error:', error);
-    return generatePolicy('undefined', 'Deny', event.methodArn);
+    console.error('Authorization Error:', error);
+    return createPolicy('anonymous', 'Deny', event.methodArn);
   }
-  //  The Lambda function returns an IAM policy and a principle identifier.
+}
 
-  // If the Lambda function does not return that information,
-  // the call fails and API Gateway returns a 401 UNAUTHORIZED HTTP response.
-};
-
-function generatePolicy(principalId: string, effect: string, resource: string) {
+function createPolicy(principalId: string, effect: string, resource: string) {
   return {
-    principalId: principalId,
+    principalId,
     policyDocument: {
+      Version: '2012-10-17',
       Statement: [
         {
           Action: 'execute-api:Invoke',
@@ -40,24 +34,31 @@ function generatePolicy(principalId: string, effect: string, resource: string) {
           Resource: resource,
         },
       ],
-      Version: '2012-10-17',
     },
   };
 }
 
-function decodeAuthHeader(authHeader: string) {
+function extractCredentials(authHeader: string) {
   if (!authHeader.startsWith('Basic ')) {
-    throw new Error('Invalid authorization header');
+    throw new Error('Invalid authorization header format.');
   }
 
-  const encodedCreds = authHeader.split('Basic ')[1];
-  console.log('encodedCreds: ', encodedCreds);
-  const decodedCreds = Buffer.from(encodedCreds, 'base64').toString('utf-8');
-  const [login, password] = decodedCreds.split(':');
+  const base64Credentials = authHeader.split('Basic ')[1]; // Skip "Basic "
+  console.log('Base64 credentials:', base64Credentials);
 
-  return { login, password };
+  const plainCredentials = Buffer.from(base64Credentials, 'base64').toString();
+  const [username, password] = plainCredentials.split(':');
+
+  return { username, password };
 }
 
-async function getUserPass(login: string) {
-  return process.env[login];
+function authorizeUser({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) {
+  const isValidUser = username && password === process.env.USER_PASSWORD;
+  return isValidUser ? 'Allow' : 'Deny';
 }
