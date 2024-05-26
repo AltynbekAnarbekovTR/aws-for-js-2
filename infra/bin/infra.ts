@@ -6,6 +6,7 @@ import { ProductServiceStack } from '../lib/project/stacks/products/product-serv
 import { DynamoStack } from '../lib/project/stacks/dynamo/dynamo-stack';
 import { RdsLambdaStack } from '../lib/project/stacks/rds/rds-stack';
 import { ImportStack } from '../lib/project/stacks/import-stack/import-stack';
+import { NestJsLambdaStack } from '../lib/project/stacks/nest-app-service/nest-app-service';
 
 const app = new cdk.App();
 new DeployWebAppStack(app, 'DeployWebAppStack', {
@@ -30,3 +31,5 @@ new RdsLambdaStack(app, 'RdsLambdaStack', {
 });
 
 new ImportStack(app, 'ImportStack');
+
+new NestJsLambdaStack(app, 'NestJsLambdaConstruct');

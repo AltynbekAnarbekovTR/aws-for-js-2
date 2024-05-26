@@ -22,6 +22,7 @@
     "deploy:auth": "npm run build && cdk deploy AuthorizerStack",
     "deploy:import-csv": "npm run build && cdk deploy ImportServiceStack",
     "deploy:backend": "npm run build && cdk deploy BackendStack",
+    "deploy:nest": "npm run build && cdk deploy NestJsLambdaConstruct",
     "deploy:all": "npm run build:shop && npm run build && cdk deploy --all",
     "build:webpack": "webpack",
     "test:clear": "jest --clearCache",
