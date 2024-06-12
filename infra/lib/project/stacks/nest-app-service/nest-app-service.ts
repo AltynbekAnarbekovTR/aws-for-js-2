@@ -8,7 +8,7 @@ import * as rds from 'aws-cdk-lib/aws-rds';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-const LAMBDA_PATH = '../../nodejs-aws-cart-api/dist';
+const LAMBDA_PATH = './nest-app/dist';
 
 export class NestJsLambdaStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
